@@ -3,5 +3,7 @@ import './bootstrap';
 import { createApp } from 'vue'
 
 import App from './App.vue'
+import '../css/app.css'
+import router from './router';
 
-createApp(App).mount("#app")
+createApp(App).use(router).mount("#app")

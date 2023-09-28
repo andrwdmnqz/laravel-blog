@@ -1,0 +1,78 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Lato', sans-serif;
+    font-size: 20px;
+}
+
+a {
+    text-decoration: none;
+    color: #d9dbda;
+}
+
+.background {
+    background-color: #882020;
+    height: 100vh;
+}
+
+.header-background {
+    background-color: #1a1e24;
+    position: sticky;
+    width: 100%;
+    top: 0;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 10px;
+    position: relative;
+}
+
+.header {
+    background-color: #1a1e24;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+}
+
+.logo {
+    display: flex;
+    color: #d9dbda;
+    font-weight: 700;
+    align-items: center;
+    padding: 10px 10px;
+}
+
+.lara-logo {
+    width: 50px;
+    height: auto;
+    margin-right: 15px;
+}
+
+.actions a {
+    margin-right: 20px;
+}
+
+.actions a:last-child {
+    margin-right: 0;
+}
+
+main {
+    margin-top: 70px;
+}
+
+.footer-background {
+    background-color: #1a1e24;
+    color: white;
+    font-weight: 300;
+    padding: 10px 0;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
