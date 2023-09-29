@@ -11,22 +11,24 @@
                             <p>Blog</p>
                         </div>
                         <div class="actions">
-                            <a href="#">Home</a>
-                            <a href="#">Blog</a>
-                            <a href="#">About</a>
+                            <router-link :to="{name: 'Home'}" class="header-link">Home</router-link>
+                            <router-link :to="{name: 'Blog'}" class="header-link">Blog</router-link>
+                            <router-link :to="{name: 'About'}" class="header-link">About</router-link>
                         </div>
                     </div>
                 </div>
             </div>
         </header>
 
-        <main class="container">
-            <router-view></router-view>
-        </main>
+        <div class="page-content">
+            <main class="container main-content">
+                <router-view></router-view>
+            </main>
+        </div>
 
         <footer>
             <div class="footer-background">
-                <div class="container">
+                <div class="container footer">
                     <p>&copy; Laravel-vue blog by Andrii S.</p>
                 </div>
             </div>
