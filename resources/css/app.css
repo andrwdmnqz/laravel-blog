@@ -14,6 +14,10 @@ a {
     color: #d9dbda;
 }
 
+a:visited {
+    color: white;
+}
+
 .background {
     background-color: #882020;
     height: 100%;
@@ -55,6 +59,12 @@ a {
     margin-right: 15px;
 }
 
+.actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
 .actions .header-link {
     margin-right: 20px;
 }
@@ -79,7 +89,7 @@ a {
 .posts {
     margin: 40px 0px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     flex-wrap: wrap;
     gap: 20px;
     margin: 40px 0;
@@ -118,6 +128,7 @@ a {
 .post-attributes {
     display: flex;
     justify-content: space-between;
+    color: white;
 }
 
 .footer-background {
@@ -132,4 +143,30 @@ a {
     height: 100%;
     display: flex;
     align-items: center;
+}
+
+.router-link-active {
+    background-color: #a22e2e;
+    padding: 5px 13px;
+    border-radius: 5px;
+}
+
+@media screen and (max-width: 576px) {
+    .actions .header-link {
+        font-size: 16px;
+        margin-right: 10px;
+    }
+
+    .actions .header-link:last-child {
+        margin-right: 0px;
+    }
+
+    .lara-logo {
+        width: 40px;
+        margin-right: 5px;
+    }
+
+    .header {
+        height: 90px;
+    }
 }

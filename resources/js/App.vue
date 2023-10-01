@@ -14,6 +14,9 @@
                             <router-link :to="{name: 'Home'}" class="header-link">Home</router-link>
                             <router-link :to="{name: 'Blog'}" class="header-link">Blog</router-link>
                             <router-link :to="{name: 'About'}" class="header-link">About</router-link>
+                            <router-link :to="{name: 'Login'}" class="header-link">Login</router-link>
+                            <router-link :to="{name: 'Register'}" class="header-link">Register</router-link>
+                            <router-link :to="{name: 'Manage'}" class="header-link">Manage</router-link>
                         </div>
                     </div>
                 </div>

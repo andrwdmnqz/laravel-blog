@@ -6,7 +6,7 @@
         <div class="post-card">
             <img src="/storage/team-empire.jpg" alt="Cybersport team">
             <div class="post-title-attributes">
-                <h3>Team empire in cybersport</h3>
+                <h3><router-link :to="{ name: 'SingleBlog', params: { slug: 'Team-empire-in-cybersport' }}">Team empire in cybersport</router-link></h3>
                 <div class="post-attributes">
                     <p>Post author</p>
                     <p>Created when</p>

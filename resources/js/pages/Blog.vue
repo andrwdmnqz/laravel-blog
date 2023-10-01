@@ -8,20 +8,20 @@
     </div>
     <div class="tags">
         <div class="tag">
-            <span>Health</span>
+            <span>#Health</span>
         </div>
         <div class="tag">
-            <span>Sport</span>
+            <span>#Sport</span>
         </div>
         <div class="tag">
-            <span>Music</span>
+            <span>#Music</span>
         </div>
     </div>
     <div class="posts">
         <div class="post-card">
             <img src="/storage/team-empire.jpg" alt="Cybersport team">
             <div class="post-title-attributes">
-                <h3>Team empire in cybersport</h3>
+                <h3><router-link :to="{ name: 'SingleBlog', params: { slug: 'Team-empire-in-cybersport' }}">Team empire in cybersport</router-link></h3>
                 <div class="post-attributes">
                     <p>Post author</p>
                     <p>Created when</p>
@@ -131,6 +131,7 @@
     justify-content: center;
     gap: 20px;
     margin-top: 40px;
+    flex-wrap: wrap;
 }
 
 .tag {
@@ -165,5 +166,16 @@
 
 .pagination a:hover {
     background-color: #1a1e24;
+}
+
+@media screen and (max-width: 576px) {
+    .search-input {
+        width: 180px;
+    }
+
+    .tag {
+        padding: 8px 24px;
+        font-size: 16px;
+    }
 }
 </style>
