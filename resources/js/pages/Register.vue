@@ -37,6 +37,25 @@
 </template>
 
 <script>
+export default {
+    data() {
+        return {
+            fields: {},
+            errors: {}
+        }
+    },
+    methods: {
+        submit() {
+            axios.post('/api/register', this.fields).then((response) => {
+                localStorage.setItem('authToken', response.data.token);
+                this.$router.push({name: 'Manage'});
+            }).catch((error) => {
+                console.log(error);
+                this.errors = error.response.data.errors;
+            });
+        }
+    }
+};
 </script>
 
 <style>

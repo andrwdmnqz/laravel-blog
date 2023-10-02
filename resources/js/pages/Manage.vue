@@ -2,6 +2,9 @@
     <div class="main-title">
         <h1>Manage panel</h1>
     </div>
+    <div class="welcome-title">
+        <h2>Hello, </h2>
+    </div>
     <div class="manage-actions">
         <ul>
             <li>Create post</li>
@@ -13,6 +16,7 @@
 </template>
 
 <script>
+
 </script>
 
 <style>
@@ -36,5 +40,11 @@
 
 .manage-actions ul li:hover {
     cursor: pointer;
+}
+
+.welcome-title {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
 }
 </style>
