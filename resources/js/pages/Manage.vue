@@ -5,12 +5,16 @@
     <div class="manage-actions">
         <ul>
             <li>Create post</li>
-            <li>Edit post</li>
+            <li>Post list</li>
             <li>Create category</li>
-            <li>Edit category</li>
+            <li>Category list</li>
         </ul>
     </div>
 </template>
+
+<script>
+</script>
+
 <style>
 .manage-actions {
     display: flex;
@@ -27,5 +31,10 @@
 
 .manage-actions ul li {
     padding: 5px 0;
+    text-decoration: underline;
+}
+
+.manage-actions ul li:hover {
+    cursor: pointer;
 }
 </style>

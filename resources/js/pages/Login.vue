@@ -15,10 +15,10 @@
                     <input type="password" id="password" class="input-field">
                 </div>
                 <button class="submit-button">Sign in</button>
+                <p>Already have an account? <router-link :to="{name: 'Register'}" class="header-link redirect-link">Sign up</router-link></p>
             </form>
         </div>
     </div>
-
 </template>
 <style>
 .center-form {
@@ -46,7 +46,7 @@
 }
 
 .input-field {
-    width: 250px;
+    width: 100%;
     height: 25px;
     font-size: 20px;
     padding-left: 1px;
@@ -64,6 +64,15 @@
 
 .submit-button:hover {
     cursor: pointer;
+}
+
+.login-form p {
+    padding-top: 15px;
+}
+
+.redirect-link {
+    color: #0c0c6b !important;
+    text-decoration: underline;
 }
 </style>
 <script setup>
