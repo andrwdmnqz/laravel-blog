@@ -27,7 +27,7 @@
                     <input type="password" id="confirm-password" class="input-field"
                            v-model="fields.password_confirmation">
                 </div>
-                <button class="submit-button">Sign up</button>
+                <button class="submit-button" type="submit">Sign up</button>
                 <p>Already have an account?
                     <router-link :to="{name: 'Login'}" class="header-link redirect-link">Sign in</router-link>
                 </p>

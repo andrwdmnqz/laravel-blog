@@ -7,24 +7,59 @@
             <form>
                 <div class="form-group">
                     <label for="email">Email</label><br>
-                    <input type="text" id="email" class="input-field">
+                    <input type="text" id="email" class="input-field" v-model="fields.email">
+                    <span v-if="errors.email" class="error-validation">{{ errors.email[0] }}</span>
+                    <span v-if="errors.error_text" class="error-validation">{{ errors.error_text }}</span>
                 </div>
 
                 <div class="form-group">
                     <label for="name">Password</label><br>
-                    <input type="password" id="password" class="input-field">
+                    <input type="password" id="password" class="input-field" v-model="fields.password">
+                    <span v-if="errors.password" class="error-validation">{{ errors.password[0] }}</span>
                 </div>
-                <button class="submit-button">Sign in</button>
-                <p>Already have an account? <router-link :to="{name: 'Register'}" class="header-link redirect-link">Sign up</router-link></p>
+                <button class="submit-button" type="button" @click="submit">Sign in</button>
+                <p>Already have an account?
+                    <router-link :to="{name: 'Register'}" class="header-link redirect-link">Sign up</router-link>
+                </p>
             </form>
         </div>
     </div>
 </template>
+
+<script>
+export default {
+    data() {
+        return {
+            wrongCredentialsText: '',
+            fields: {
+            },
+            errors: {
+            }
+        }
+    },
+    methods: {
+        submit() {
+            this.errors = {};
+            axios.post('/api/login', this.fields).then((response) => {
+                localStorage.setItem('authToken', response.data.token);
+                this.$router.push({name: 'Manage'});
+            }).catch((error) => {
+                this.errors = error.response.data.errors;
+                if (error.response.status === 401) {
+                    this.errors = error.response.data;
+                }
+            });
+        }
+    }
+}
+</script>
+
 <style>
 .center-form {
     display: flex;
     justify-content: center;
 }
+
 .login-form {
     border-radius: 20px;
     display: flex;
