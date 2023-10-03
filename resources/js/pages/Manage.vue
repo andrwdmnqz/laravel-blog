@@ -10,8 +10,8 @@
         <ul>
             <li>Create post</li>
             <li>Post list</li>
-            <li>Create category</li>
-            <li>Category list</li>
+            <li><router-link :to="{name: 'CreateCategories'}">Create categories</router-link></li>
+            <li>Categories list</li>
         </ul>
     </div>
 </template>

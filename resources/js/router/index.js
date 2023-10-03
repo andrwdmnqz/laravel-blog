@@ -7,6 +7,7 @@ import SingleBlog from '../pages/SingleBlog.vue';
 import Login from '../pages/Login.vue';
 import Register from '../pages/Register.vue';
 import Manage from "../pages/Manage.vue";
+import CreateCategories from "../categories/CreateCategories.vue";
 
 const routes = [
     {
@@ -48,6 +49,12 @@ const routes = [
         component: Manage,
         meta: {requiresAuth: true}
     },
+    {
+        path: "/categories/create",
+        name: "CreateCategories",
+        component: CreateCategories,
+        meta: {requiresAuth: true}
+    }
 ];
 
 const router = createRouter({
