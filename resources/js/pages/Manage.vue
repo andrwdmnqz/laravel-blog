@@ -39,7 +39,12 @@ export default {
                 this.userName = response.data.name;
             })
             .catch((error) => {
-                console.log(error);
+                if (error.response.status === 401) {
+                    this.$emit('updateSidebar');
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('authenticated');
+                    this.$router.push({name: 'Login'});
+                }
             });
     },
     methods: {
@@ -54,6 +59,8 @@ export default {
                 })
                 .then((response) => {
                     localStorage.removeItem('authToken');
+                    localStorage.removeItem('authenticated');
+                    this.$emit('updateSidebar');
                     this.$router.push({name: 'Home'});
                 })
                 .catch((error) => {

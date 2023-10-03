@@ -14,9 +14,9 @@
                             <router-link :to="{name: 'Home'}" class="header-link">Home</router-link>
                             <router-link :to="{name: 'Blog'}" class="header-link">Blog</router-link>
                             <router-link :to="{name: 'About'}" class="header-link">About</router-link>
-                            <router-link :to="{name: 'Login'}" class="header-link">Login</router-link>
-                            <router-link :to="{name: 'Register'}" class="header-link">Register</router-link>
-                            <router-link :to="{name: 'Manage'}" class="header-link">Manage</router-link>
+                            <router-link v-if="!loggedIn" :to="{name: 'Login'}" class="header-link">Login</router-link>
+                            <router-link v-if="!loggedIn" :to="{name: 'Register'}" class="header-link">Register</router-link>
+                            <router-link v-if="loggedIn" :to="{name: 'Manage'}" class="header-link">Manage</router-link>
                         </div>
                     </div>
                 </div>
@@ -25,7 +25,7 @@
 
         <div class="page-content">
             <main class="container main-content">
-                <router-view></router-view>
+                <router-view @update-sidebar="updateSidebar"></router-view>
             </main>
         </div>
 
@@ -38,3 +38,26 @@
         </footer>
     </div>
 </template>
+
+<script>
+export default {
+    data() {
+        return {
+            loggedIn: false
+        }
+    },
+    methods: {
+        updateSidebar() {
+            this.loggedIn = !this.loggedIn;
+        }
+    },
+    mounted() {
+        if (localStorage.getItem('authenticated')) {
+            this.loggedIn = true;
+        }
+        else {
+            this.loggedIn = false;
+        }
+    }
+}
+</script>

@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+import {createRouter, createWebHistory} from "vue-router";
 
 import About from '../pages/About.vue';
 import Blog from '../pages/Blog.vue';
@@ -33,22 +33,40 @@ const routes = [
         path: "/login",
         name: "Login",
         component: Login,
+        meta: {requiresGuest: true}
+
     },
     {
         path: "/register",
         name: "Register",
         component: Register,
+        meta: {requiresGuest: true}
     },
     {
         path: "/manage",
         name: "Manage",
         component: Manage,
+        meta: {requiresAuth: true}
     },
 ];
 
 const router = createRouter({
     history: createWebHistory(),
     routes
+});
+
+router.beforeEach((to, from) => {
+    const authenticated = localStorage.getItem('authenticated');
+
+    if (to.meta.requiresGuest && authenticated) {
+        return {
+            name: 'Manage',
+        };
+    } else if (to.meta.requiresAuth && !authenticated) {
+        return {
+            name: 'Login'
+        };
+    }
 });
 
 export default router;

@@ -42,7 +42,9 @@ export default {
             this.errors = {};
             axios.post('/api/login', this.fields).then((response) => {
                 localStorage.setItem('authToken', response.data.token);
+                localStorage.setItem('authenticated', 'true');
                 this.$router.push({name: 'Manage'});
+                this.$emit('updateSidebar');
             }).catch((error) => {
                 this.errors = error.response.data.errors;
                 if (error.response.status === 401) {

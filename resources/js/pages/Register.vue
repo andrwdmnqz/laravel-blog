@@ -48,7 +48,9 @@ export default {
         submit() {
             axios.post('/api/register', this.fields).then((response) => {
                 localStorage.setItem('authToken', response.data.token);
+                localStorage.setItem('authenticated', 'true');
                 this.$router.push({name: 'Manage'});
+                this.$emit('updateSidebar');
             }).catch((error) => {
                 console.log(error);
                 this.errors = error.response.data.errors;
