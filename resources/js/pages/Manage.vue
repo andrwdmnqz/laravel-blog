@@ -11,7 +11,7 @@
             <li>Create post</li>
             <li>Post list</li>
             <li><router-link :to="{name: 'CreateCategories'}">Create categories</router-link></li>
-            <li>Categories list</li>
+            <li><router-link :to="{name: 'CategoriesList'}">Categories list</router-link></li>
         </ul>
     </div>
 </template>

@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function() {
     Route::post('logout', [UserController::class, 'logout']);
     Route::post('categories/create', [CategoryController::class, 'store']);
+    Route::get('categories', [CategoryController::class, 'index']);
 });
 
 // Public routes

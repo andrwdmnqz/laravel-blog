@@ -20,6 +20,9 @@
             </form>
         </div>
     </div>
+    <div class="link">
+        <h2><router-link :to="{name: 'CategoriesList'}">Categories list</router-link></h2>
+    </div>
 </template>
 
 <script>

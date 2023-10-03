@@ -18,4 +18,9 @@ class CategoryController extends Controller
             'message' => 'Category created successfully'
         ], 201);
     }
+
+    public function index()
+    {
+        return Category::latest()->get();
+    }
 }
