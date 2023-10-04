@@ -1,9 +1,9 @@
 <template>
     <div class="main-title">
-        <h1>Create category</h1>
+        <h1>Edit category</h1>
     </div>
     <div class="success-message" v-if="success">
-        Category created successfully!
+        Category updated successfully!
     </div>
     <div class="center-form">
         <div class="category-form">
@@ -14,7 +14,7 @@
                     <span v-if="errors.name">{{ errors.name[0] }}</span>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="submit-button">Create</button>
+                    <button type="submit" class="submit-button">Update</button>
                 </div>
             </form>
         </div>
@@ -28,6 +28,7 @@
 import axios from "axios";
 
 export default {
+    props: ['id'],
     data() {
         return {
             field: {},
@@ -40,13 +41,12 @@ export default {
             const token = localStorage.getItem('authToken');
 
             axios
-                .post('/api/categories/create', this.field, {
+                .put('/api/categories/' + this.id, this.field, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     }
                 })
                 .then(() => {
-                    this.field = {};
                     this.errors = {};
                     this.success = true;
 
@@ -54,10 +54,26 @@ export default {
                         this.success = false;
                     }, 2000);
                 }).catch((error) => {
-                    this.errors = error.response.data.errors;
+                this.errors = error.response.data.errors;
             });
         }
-    }
+    },
+    mounted() {
+        const authToken = localStorage.getItem("authToken");
+
+        axios
+            .get('/api/categories/' + this.id, {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
+            })
+            .then((response) => {
+                this.field = response.data;
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    },
 }
 </script>
 

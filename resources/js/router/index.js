@@ -9,6 +9,7 @@ import Register from '../pages/Register.vue';
 import Manage from "../pages/Manage.vue";
 import CreateCategories from "../categories/CreateCategories.vue";
 import CategoriesList from "../categories/CategoriesList.vue";
+import EditCategories from "../categories/EditCategories.vue";
 
 const routes = [
     {
@@ -61,7 +62,14 @@ const routes = [
         name: "CategoriesList",
         component: CategoriesList,
         meta: {requiresAuth: true}
-    }
+    },
+    {
+        path: "/categories/:id/edit",
+        name: "EditCategories",
+        component: EditCategories,
+        meta: {requiresAuth: true},
+        props: true
+    },
 ];
 
 const router = createRouter({

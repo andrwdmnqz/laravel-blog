@@ -54,7 +54,7 @@ export default {
                         this.success = false;
                     }, 2000);
                 }).catch((error) => {
-                    this.errors = error.response.data.errors;
+                this.errors = error.response.data.errors;
             });
         }
     }

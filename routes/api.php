@@ -20,10 +20,20 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// Private user routes
+
 Route::middleware('auth:sanctum')->group(function() {
     Route::post('logout', [UserController::class, 'logout']);
+});
+
+// Private categories routes
+
+Route::middleware('auth:sanctum')->group(function() {
     Route::post('categories/create', [CategoryController::class, 'store']);
     Route::get('categories', [CategoryController::class, 'index']);
+    Route::get('categories/{category}', [CategoryController::class, 'show']);
+    Route::put('categories/{category}', [CategoryController::class, 'update']);
+    Route::delete('categories/{category}', [CategoryController::class, 'destroy']);
 });
 
 // Public routes
