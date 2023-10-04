@@ -10,26 +10,32 @@
             <form @submit.prevent="submit">
                 <div class="form-group">
                     <div class="form-block">
-                        <label for="name">Title</label><br>
-                        <input type="text" id="name" v-model="fields.name">
-                        <span v-if="errors.name">{{ errors.name[0] }}</span>
+                        <label for="title">Title</label><br>
+                        <input type="text" id="title" v-model="fields.title">
+                        <span v-if="errors.title">{{ errors.title[0] }}</span>
                     </div>
 
                     <div class="form-block">
                         <label for="image">Image</label><br>
-                        <input type="file" id="image" class="image">
+                        <input type="file" id="image" class="image" @input="getFile" ref="fileInput">
+                        <span v-if="errors.file">{{ errors.file[0] }}</span>
                     </div>
+                    <div class="preview">
+                        <img :src="url" alt=""/>
+                    </div>
+
                     <div class="form-block">
                         <label for="category">Category</label><br>
-                        <select id="category">
-                            <option>Option 1</option>
-                            <option>Option 2</option>
-                            <option>Option 3</option>
+                        <select v-model="fields.category_id" id="category">
+                            <option disabled value="">Select category</option>
+                            <option :value="category.id" v-for="category in categories" :key="category.id">{{ category.name }}</option>
                         </select>
+                        <span v-if="errors.category_id">{{ errors.category_id[0] }}</span>
                     </div>
                     <div class="form-block">
                         <label for="body">Post text</label><br>
-                        <textarea id="body" v-model="fields.body"></textarea>
+                        <textarea id="body" v-model="fields.text"></textarea>
+                        <span v-if="errors.text">{{ errors.text[0] }}</span>
                     </div>
                 </div>
                 <div class="form-group">
@@ -39,7 +45,9 @@
         </div>
     </div>
     <div class="link">
-        <h2><router-link :to="{name: 'CategoriesList'}">Posts list</router-link></h2>
+        <h2>
+            <router-link :to="{name: 'CategoriesList'}">Posts list</router-link>
+        </h2>
     </div>
 </template>
 
@@ -49,24 +57,35 @@ import axios from "axios";
 export default {
     data() {
         return {
-            fields: {},
+            fields: {
+                category_id: "",
+            },
             errors: {},
-            success: false
+            success: false,
+            url: "",
+            categories: []
         };
     },
     methods: {
         submit() {
             const token = localStorage.getItem('authToken');
 
+            console.log(this.fields);
+
             axios
-                .post('/api/categories/create', this.field, {
+                .post('/api/posts', this.fields, {
                     headers: {
                         Authorization: `Bearer ${token}`,
+                        "content-type": "multipart/form-data",
                     }
                 })
                 .then(() => {
-                    this.field = {};
+                    this.fields = {};
+                    this.fields.category_id = "";
                     this.errors = {};
+                    this.url = null;
+                    this.$refs.fileInput.value = null;
+
                     this.success = true;
 
                     setInterval(() => {
@@ -74,8 +93,37 @@ export default {
                     }, 2000);
                 }).catch((error) => {
                 this.errors = error.response.data.errors;
+                this.success = false;
             });
+        },
+
+        getFile(f) {
+            const uploadedFile = f.target.files[0];
+            this.fields.file = uploadedFile;
+            this.url = URL.createObjectURL(uploadedFile);
+            URL.revokeObjectURL(uploadedFile);
         }
+    },
+    mounted() {
+        this.fields = {};
+        this.fields.category_id = "";
+        this.errors = {};
+        this.success = false;
+
+        const authToken = localStorage.getItem("authToken");
+
+        axios
+            .get('/api/categories', {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
+            })
+            .then((response) => {
+                this.categories = response.data;
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 }
 </script>
@@ -138,7 +186,7 @@ export default {
 
 .form-block textarea {
     width: 100%;
-    min-height: 100px; /* Задайте бажану мінімальну висоту тут */
+    min-height: 100px;
     min-width: 100%;
     max-width: 100%;
     max-height: 30%;
@@ -153,4 +201,10 @@ export default {
 .submit-button:hover {
     cursor: pointer;
 }
+
+.preview img {
+    max-width: 100%;
+    max-height: 150px;
+}
+
 </style>

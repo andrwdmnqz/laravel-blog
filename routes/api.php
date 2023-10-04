@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,7 +27,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('logout', [UserController::class, 'logout']);
 });
 
-// Private categories routes
+// Categories routes
 
 Route::middleware('auth:sanctum')->group(function() {
     Route::post('categories/create', [CategoryController::class, 'store']);
@@ -34,6 +35,12 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('categories/{category}', [CategoryController::class, 'show']);
     Route::put('categories/{category}', [CategoryController::class, 'update']);
     Route::delete('categories/{category}', [CategoryController::class, 'destroy']);
+});
+
+// Private posts routes
+
+Route::middleware('auth:sanctum')->group(function() {
+    Route::post('posts', [PostController::class, 'store']);
 });
 
 // Public routes
