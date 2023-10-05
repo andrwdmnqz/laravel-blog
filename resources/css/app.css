@@ -125,6 +125,10 @@ a:visited {
     padding: 5px;
 }
 
+.white-link {
+    color: white;
+}
+
 .post-attributes {
     display: flex;
     justify-content: space-between;

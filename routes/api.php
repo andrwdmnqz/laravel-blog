@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -47,3 +48,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
 Route::post('register', [UserController::class, 'store']);
 Route::post('login', [UserController::class, 'login']);
+
+Route::get('home-posts', [HomeController::class, 'index']);
+Route::get('posts/{post:link}', [PostController::class, 'show']);
+Route::get('posts', [PostController::class, 'index']);

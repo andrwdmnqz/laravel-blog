@@ -1,18 +1,17 @@
 <template>
     <div class="main-title">
-        <h1>Post title</h1>
+        <h1>{{ post.title }}</h1>
     </div>
     <div class="post-data">
         <div class="post-image">
-            <img src="/storage/team-empire.jpg" alt="Team empire">
+            <img :src="`/${post.image_path}`" alt="Post image">
         </div>
         <div class="post-attributes">
-            <p>Post author</p>
-            <p>Created when</p>
+            <p>By {{ post.user }}</p>
+            <p>{{ post.created_at }}</p>
         </div>
         <div class="about-content">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel nisi eget augue ultrices pellentesque. Praesent venenatis, nulla id efficitur tincidunt, ipsum mauris aliquet dolor, id gravida tellus velit nec arcu. Vestibulum et hendrerit sem. Duis aliquam ac nulla vitae consectetur. Duis venenatis tristique fermentum. Praesent lorem massa, vehicula ut lectus eu, ullamcorper mollis mi. Aliquam in mi et mauris posuere bibendum. Fusce pretium arcu laoreet massa condimentum, ac semper augue mollis.</p>
-            <p>Nulla at lacinia lorem. Curabitur in ipsum vestibulum, pharetra dolor sed, tristique dui. Sed efficitur sem sed commodo egestas. Donec viverra aliquet ligula. Nulla ac dui augue. Praesent nec aliquet quam. Maecenas vitae sollicitudin eros. Quisque aliquam rhoncus dui. Duis ut sem in magna fringilla fringilla eu a massa. Vestibulum fringilla lobortis risus, eu porttitor sapien varius vitae. Proin aliquet nibh a turpis elementum, quis posuere magna blandit. Vivamus at nunc dui. Curabitur aliquet vehicula massa, at pretium dolor facilisis at.</p>
+            <p>{{ post.text }}</p>
         </div>
     </div>
 
@@ -34,6 +33,30 @@
         </div>
     </div>
 </template>
+
+<script>
+import axios from "axios";
+
+export default {
+    props: ['slug'],
+    data() {
+        return {
+            post: {},
+        }
+    },
+    mounted() {
+        axios
+            .get('/api/posts/' + this.slug)
+            .then((response) => {
+                this.post = response.data.data;
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+}
+</script>
+
 <style>
 .post-data {
     max-width: 600px;

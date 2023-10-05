@@ -11,12 +11,12 @@
                             <p>Blog</p>
                         </div>
                         <div class="actions">
-                            <router-link :to="{name: 'Home'}" class="header-link">Home</router-link>
-                            <router-link :to="{name: 'Blog'}" class="header-link">Blog</router-link>
-                            <router-link :to="{name: 'About'}" class="header-link">About</router-link>
-                            <router-link v-if="!loggedIn" :to="{name: 'Login'}" class="header-link">Login</router-link>
-                            <router-link v-if="!loggedIn" :to="{name: 'Register'}" class="header-link">Register</router-link>
-                            <router-link v-if="loggedIn" :to="{name: 'Manage'}" class="header-link">Manage</router-link>
+                            <router-link :to="{name: 'Home'}" class="header-link white-link">Home</router-link>
+                            <router-link :to="{name: 'Blog'}" class="header-link white-link">Blog</router-link>
+                            <router-link :to="{name: 'About'}" class="header-link white-link">About</router-link>
+                            <router-link v-if="!loggedIn" :to="{name: 'Login'}" class="header-link white-link">Login</router-link>
+                            <router-link v-if="!loggedIn" :to="{name: 'Register'}" class="header-link white-link">Register</router-link>
+                            <router-link v-if="loggedIn" :to="{name: 'Manage'}" class="header-link white-link">Manage</router-link>
                         </div>
                     </div>
                 </div>

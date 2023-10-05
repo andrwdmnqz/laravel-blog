@@ -8,10 +8,10 @@
     </div>
     <div class="manage-actions">
         <ul>
-            <li><router-link :to="{name: 'CreatePosts'}">Create posts</router-link></li>
+            <li><router-link :to="{name: 'CreatePosts'}" class="white-link">Create posts</router-link></li>
             <li>Post list</li>
-            <li><router-link :to="{name: 'CreateCategories'}">Create categories</router-link></li>
-            <li><router-link :to="{name: 'CategoriesList'}">Categories list</router-link></li>
+            <li><router-link :to="{name: 'CreateCategories'}" class="white-link">Create categories</router-link></li>
+            <li><router-link :to="{name: 'CategoriesList'}" class="white-link">Categories list</router-link></li>
         </ul>
     </div>
 </template>

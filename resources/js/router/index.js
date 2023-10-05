@@ -32,6 +32,7 @@ const routes = [
         path: "/blog/:slug",
         name: "SingleBlog",
         component: SingleBlog,
+        props: true
     },
     {
         path: "/login",

@@ -18,63 +18,17 @@
         </div>
     </div>
     <div class="posts">
-        <div class="post-card">
-            <img src="/storage/team-empire.jpg" alt="Cybersport team">
+        <div class="post-card" v-for="post in posts" :key="post.id">
+            <img :src="post.image_path" alt="Post image">
             <div class="post-title-attributes">
-                <h3><router-link :to="{ name: 'SingleBlog', params: { slug: 'Team-empire-in-cybersport' }}">Team empire in cybersport</router-link></h3>
+                <h3>
+                    <router-link :to="{ name: 'SingleBlog', params: { slug: post.link }}" class="white-link">
+                        {{ post.title }}
+                    </router-link>
+                </h3>
                 <div class="post-attributes">
-                    <p>Post author</p>
-                    <p>Created when</p>
-                </div>
-            </div>
-        </div>
-        <div class="post-card">
-            <img src="/storage/team-empire.jpg" alt="Cybersport team">
-            <div class="post-title-attributes">
-                <h3>Team empire in cybersport</h3>
-                <div class="post-attributes">
-                    <p>Post author</p>
-                    <p>Created when</p>
-                </div>
-            </div>
-        </div>
-        <div class="post-card">
-            <img src="/storage/team-empire.jpg" alt="Cybersport team">
-            <div class="post-title-attributes">
-                <h3>Team empire in cybersport</h3>
-                <div class="post-attributes">
-                    <p>Post author</p>
-                    <p>Created when</p>
-                </div>
-            </div>
-        </div>
-        <div class="post-card">
-            <img src="/storage/team-empire.jpg" alt="Cybersport team">
-            <div class="post-title-attributes">
-                <h3>Team empire in cybersport</h3>
-                <div class="post-attributes">
-                    <p>Post author</p>
-                    <p>Created when</p>
-                </div>
-            </div>
-        </div>
-        <div class="post-card">
-            <img src="/storage/team-empire.jpg" alt="Cybersport team">
-            <div class="post-title-attributes">
-                <h3>Team empire in cybersport</h3>
-                <div class="post-attributes">
-                    <p>Post author</p>
-                    <p>Created when</p>
-                </div>
-            </div>
-        </div>
-        <div class="post-card">
-            <img src="/storage/team-empire.jpg" alt="Cybersport team">
-            <div class="post-title-attributes">
-                <h3>Team empire in cybersport</h3>
-                <div class="post-attributes">
-                    <p>Post author</p>
-                    <p>Created when</p>
+                    <p>By {{ post.user }}</p>
+                    <p>{{ post.created_at }}</p>
                 </div>
             </div>
         </div>
@@ -90,8 +44,34 @@
         </div>
     </div>
 </template>
-<script setup>
+
+<script>
+import axios from "axios";
+
+export default {
+    emits: ['updateSidebar'],
+
+    data() {
+        return {
+            posts: [],
+        }
+    },
+    mounted() {
+        const token = localStorage.getItem('authToken');
+
+        axios
+            .get('/api/posts')
+            .then((response) => {
+                this.posts = response.data.data;
+                console.log(this.posts);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+}
 </script>
+
 <style>
 
 .searchbar {

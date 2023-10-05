@@ -18,7 +18,7 @@
                 <td>{{ category.name }}</td>
                 <td>
 
-                    <router-link :to="{name: 'EditCategories', params: {id: category.id}}">
+                    <router-link :to="{name: 'EditCategories', params: {id: category.id}}" class="white-link">
                         <button class="edit-button">Edit</button>
                     </router-link>
                     <button class="delete-button" @click="destroy(category.id)">Delete</button>
@@ -29,7 +29,7 @@
     </div>
     <div class="link">
         <h2>
-            <router-link :to="{name: 'CreateCategories'}">Create categories</router-link>
+            <router-link :to="{name: 'CreateCategories'}" class="white-link">Create categories</router-link>
         </h2>
     </div>
 
