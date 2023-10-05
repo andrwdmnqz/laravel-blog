@@ -19,29 +19,29 @@
     </div>
     <div class="posts">
         <div class="post-card" v-for="post in posts" :key="post.id">
-            <img :src="post.image_path" alt="Post image">
-            <div class="post-title-attributes">
-                <h3>
-                    <router-link :to="{ name: 'SingleBlog', params: { slug: post.link }}" class="white-link">
+            <router-link :to="{ name: 'SingleBlog', params: { slug: post.link }}" class="white-link">
+                <img :src="post.image_path" alt="Post image">
+                <div class="post-title-attributes">
+                    <h3>
                         {{ post.title }}
-                    </router-link>
-                </h3>
-                <div class="post-attributes">
-                    <p>By {{ post.user }}</p>
-                    <p>{{ post.created_at }}</p>
+                    </h3>
+                    <div class="post-attributes">
+                        <p>By {{ post.user }}</p>
+                        <p>{{ post.created_at }}</p>
+                    </div>
                 </div>
-            </div>
+            </router-link>
         </div>
+    </div>
 
-        <div class="pagination">
-            <ul>
-                <li><a href="#">&laquo;</a></li>
-                <li><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">&raquo;</a></li>
-            </ul>
-        </div>
+    <div class="pagination">
+        <ul>
+            <li><a href="#">&laquo;</a></li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">&raquo;</a></li>
+        </ul>
     </div>
 </template>
 
@@ -50,7 +50,6 @@ import axios from "axios";
 
 export default {
     emits: ['updateSidebar'],
-
     data() {
         return {
             posts: [],
@@ -63,7 +62,6 @@ export default {
             .get('/api/posts')
             .then((response) => {
                 this.posts = response.data.data;
-                console.log(this.posts);
             })
             .catch((error) => {
                 console.log(error);
@@ -123,6 +121,7 @@ export default {
 .pagination {
     text-align: center;
     margin-top: 20px;
+    margin-bottom: 40px;
 }
 
 .pagination ul {

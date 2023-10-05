@@ -9,7 +9,7 @@
     <div class="manage-actions">
         <ul>
             <li><router-link :to="{name: 'CreatePosts'}" class="white-link">Create posts</router-link></li>
-            <li>Post list</li>
+            <li><router-link :to="{name: 'PostsList'}" class="white-link">Posts list</router-link></li>
             <li><router-link :to="{name: 'CreateCategories'}" class="white-link">Create categories</router-link></li>
             <li><router-link :to="{name: 'CategoriesList'}" class="white-link">Categories list</router-link></li>
         </ul>
@@ -20,6 +20,7 @@
 import axios from "axios";
 
 export default {
+    emits: ['updateSidebar'],
     data() {
         return {
             userName: '',
@@ -35,7 +36,6 @@ export default {
                 },
             })
             .then((response) => {
-                console.log(response);
                 this.userName = response.data.name;
             })
             .catch((error) => {
@@ -104,7 +104,7 @@ export default {
     position: absolute;
     font-size: 24px;
     color: white;
-    right: 0;
+    right: 2%;
     top: 0;
 }
 </style>

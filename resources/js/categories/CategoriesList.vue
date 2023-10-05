@@ -3,7 +3,7 @@
         <h1>Categories list</h1>
     </div>
     <div class="success-message" v-if="success">
-        Category created successfully!
+        Category deleted successfully!
     </div>
     <div class="center-div">
         <table>
@@ -39,6 +39,7 @@
 import axios from "axios";
 
 export default {
+    emits: ['updateSidebar'],
     data() {
         return {
             categories: [],

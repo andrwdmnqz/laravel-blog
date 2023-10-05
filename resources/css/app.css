@@ -149,7 +149,7 @@ a:visited {
     align-items: center;
 }
 
-.router-link-active {
+.header-link .router-link-active {
     background-color: #a22e2e;
     padding: 5px 13px;
     border-radius: 5px;

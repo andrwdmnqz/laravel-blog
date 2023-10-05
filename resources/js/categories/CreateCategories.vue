@@ -28,6 +28,7 @@
 import axios from "axios";
 
 export default {
+    emits: ['updateSidebar'],
     data() {
         return {
             field: {},

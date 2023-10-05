@@ -29,6 +29,7 @@ import axios from "axios";
 
 export default {
     props: ['id'],
+    emits: ['updateSidebar'],
     data() {
         return {
             field: {},

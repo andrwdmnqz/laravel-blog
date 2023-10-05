@@ -10,7 +10,7 @@
             <p>By {{ post.user }}</p>
             <p>{{ post.created_at }}</p>
         </div>
-        <div class="about-content">
+        <div class="post-content">
             <p>{{ post.text }}</p>
         </div>
     </div>
@@ -18,17 +18,11 @@
     <div class="related">
         <h2>Related posts</h2>
         <div class="related-posts">
-            <div class="related-post-card">
-                <img src="/storage/music-listening.jpg">
-                <p>Post name</p>
-            </div>
-            <div class="related-post-card">
-                <img src="/storage/music-listening.jpg">
-                <p>Post name</p>
-            </div>
-            <div class="related-post-card">
-                <img src="/storage/music-listening.jpg">
-                <p>Post name</p>
+            <div class="related-post-card" v-for="relatedPost in relatedPosts" :key="relatedPost.id">
+                <router-link :to="{ name: 'SingleBlog', params: { slug: relatedPost.link }}" class="white-link">
+                    <img :src="`/${relatedPost.image_path}`">
+                    <p>{{ relatedPost.title }}</p>
+                </router-link>
             </div>
         </div>
     </div>
@@ -38,10 +32,12 @@
 import axios from "axios";
 
 export default {
+    emits: ['updateSidebar'],
     props: ['slug'],
     data() {
         return {
             post: {},
+            relatedPosts: [],
         }
     },
     mounted() {
@@ -53,16 +49,29 @@ export default {
             .catch((error) => {
                 console.log(error);
             });
+
+        axios
+            .get('/api/related-posts/' + this.slug)
+            .then((response) => {
+                this.relatedPosts = response.data.data;
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 }
 </script>
 
 <style>
 .post-data {
-    max-width: 600px;
+    max-width: 650px;
     margin: 40px auto;
     align-items: center;
     font-size: 24px;
+    background-color: #a22e2e;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0px 15px 15px black;
 }
 
 .about-content p {
@@ -71,29 +80,46 @@ export default {
 }
 
 .post-image img {
-    width: 600px;
+    width: 100%;
+    border-radius: 10px;
+}
+
+.post-content {
+    margin-top: 20px;
+    font-weight: 300;
+    font-size: 20px;
+}
+
+.related h2 {
+    padding-left: 2%;
 }
 
 .related-posts {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
     margin: 20px 0;
 }
 
 .related-post-card {
+    max-width: 340px;
     background-color: #a22e2e;
-    width: 350px;
-    min-height: 300px;
-    height: auto;
     padding: 10px;
+    border-radius: 20px;
     box-shadow: 0px 15px 15px black;
-    border-radius: 5%;
     margin-bottom: 20px;
 }
 
 .related-post-card img {
     width: 100%;
-    border-radius: 5%;
+    border-radius: 10px;
+}
+
+@media screen and (max-width: 768px) {
+    .related-post-card {
+        width: 100%;
+    }
 }
 </style>
 <script setup>

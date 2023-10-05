@@ -11,6 +11,7 @@ import CreateCategories from "../categories/CreateCategories.vue";
 import CategoriesList from "../categories/CategoriesList.vue";
 import EditCategories from "../categories/EditCategories.vue";
 import CreatePosts from "../posts/CreatePosts.vue";
+import PostsList from "../posts/PostsList.vue";
 
 const routes = [
     {
@@ -76,6 +77,12 @@ const routes = [
         path: "/posts/create",
         name: "CreatePosts",
         component: CreatePosts,
+        meta: {requiresAuth: true}
+    },
+    {
+        path: "/manage-posts",
+        name: "PostsList",
+        component: PostsList,
         meta: {requiresAuth: true}
     }
 ];

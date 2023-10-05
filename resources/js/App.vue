@@ -25,7 +25,7 @@
 
         <div class="page-content">
             <main class="container main-content">
-                <router-view @update-sidebar="updateSidebar"></router-view>
+                <router-view @update-sidebar="updateSidebar" :key="$route.path"></router-view>
             </main>
         </div>
 
@@ -41,6 +41,7 @@
 
 <script>
 export default {
+    emits: ['updateSidebar'],
     data() {
         return {
             loggedIn: false

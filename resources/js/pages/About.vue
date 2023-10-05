@@ -1,6 +1,6 @@
 <template>
     <div class="main-title">
-        <h1>About page</h1>
+        <h1>About</h1>
     </div>
     <div class="about-content">
         <div class="about-photo">
@@ -10,12 +10,23 @@
         <p>Suspendisse elementum, nisi quis malesuada fermentum, sem lacus lacinia enim, sed lobortis turpis tortor a nunc. Donec iaculis congue elit ac sagittis. Morbi vulputate tincidunt ipsum at pellentesque. Nam a luctus sapien. Proin pharetra porttitor lectus. Nulla ac justo ut nunc egestas blandit non sed lorem. Duis dapibus ante elit, vitae imperdiet massa gravida at. Aenean posuere sem ac pharetra placerat. Sed congue lacinia odio mollis porttitor. Cras pulvinar sed quam id tincidunt. Sed quis blandit justo. Nam nec ante orci. Maecenas consequat nunc sit amet augue scelerisque tincidunt. Nullam auctor, risus in dictum dignissim, nisi quam cursus nisi, ac iaculis ante eros at nunc.</p>
     </div>
 </template>
+
+<script>
+export default {
+    emits: ['updateSidebar'],
+}
+</script>
+
 <style>
 .about-content {
     margin: 40px auto;
-    max-width: 600px;
+    max-width: 650px;
     display: flex;
     flex-direction: column;
+    padding: 20px;
+    box-shadow: 0px 15px 15px black;
+    background-color: #a22e2e;
+    border-radius: 20px;
 }
 
 .about-photo {
@@ -25,6 +36,7 @@
 
 .about-photo img {
     width: 600px;
-    padding-bottom: 30px;
+    border-radius: 15px;
+    margin-bottom: 20px;
 }
 </style>

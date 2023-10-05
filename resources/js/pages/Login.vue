@@ -28,6 +28,7 @@
 
 <script>
 export default {
+    emits: ['updateSidebar'],
     data() {
         return {
             wrongCredentialsText: '',

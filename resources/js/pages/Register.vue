@@ -38,6 +38,7 @@
 
 <script>
 export default {
+    emits: ['updateSidebar'],
     data() {
         return {
             fields: {},
