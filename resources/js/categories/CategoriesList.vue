@@ -72,14 +72,9 @@ export default {
                 });
         },
         updateList() {
-            const authToken = localStorage.getItem("authToken");
 
             axios
-                .get('/api/categories', {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`,
-                    },
-                })
+                .get('/api/categories')
                 .then((response) => {
                     this.categories = response.data;
                 })

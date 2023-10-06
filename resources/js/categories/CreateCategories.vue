@@ -1,6 +1,6 @@
 <template>
     <div class="main-title">
-        <h1>Create category</h1>
+        <h1>Create categories</h1>
     </div>
     <div class="success-message" v-if="success">
         Category created successfully!

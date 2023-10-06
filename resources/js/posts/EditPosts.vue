@@ -1,9 +1,9 @@
 <template>
     <div class="main-title">
-        <h1>Create posts</h1>
+        <h1>Edit post</h1>
     </div>
     <div class="success-message" v-if="success">
-        Post created successfully!
+        Post edited successfully!
     </div>
     <div class="center-form">
         <div class="category-form">
@@ -28,7 +28,9 @@
                         <label for="category">Category</label><br>
                         <select v-model="fields.category_id" id="category">
                             <option disabled value="">Select category</option>
-                            <option :value="category.id" v-for="category in categories" :key="category.id">{{ category.name }}</option>
+                            <option :value="category.id" v-for="category in categories" :key="category.id">
+                                {{ category.name }}
+                            </option>
                         </select>
                         <span v-if="errors.category_id">{{ errors.category_id[0] }}</span>
                     </div>
@@ -39,14 +41,14 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="submit-button">Create</button>
+                    <button type="submit" class="submit-button">Update</button>
                 </div>
             </form>
         </div>
     </div>
     <div class="link">
         <h2>
-            <router-link :to="{name: 'CategoriesList'}" class="white-link">Posts list</router-link>
+            <router-link :to="{name: 'PostsList'}" class="white-link">Posts list</router-link>
         </h2>
     </div>
 </template>
@@ -55,6 +57,7 @@
 import axios from "axios";
 
 export default {
+    props: ['slug'],
     emits: ['updateSidebar'],
     data() {
         return {
@@ -64,17 +67,26 @@ export default {
             errors: {},
             success: false,
             url: "",
-            categories: []
+            categories: [],
         };
     },
     methods: {
         submit() {
             const token = localStorage.getItem('authToken');
 
-            console.log(this.fields);
+            const fd = new FormData();
+            fd.append('title', this.fields.title);
+            fd.append('category_id', this.fields.category_id);
+            fd.append('text', this.fields.text);
+
+            if (this.fields.file) {
+                fd.append('file', this.fields.file);
+            }
+
+            fd.append('_method', 'PUT');
 
             axios
-                .post('/api/posts', this.fields, {
+                .post(`/api/posts/${this.slug}`, fd, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         "content-type": "multipart/form-data",
@@ -95,6 +107,9 @@ export default {
                 }).catch((error) => {
                 this.errors = error.response.data.errors;
                 this.success = false;
+                if (error.response.status === 403) {
+                    this.$router.push({name: 'PostsList'});
+                }
             });
         },
 
@@ -106,6 +121,18 @@ export default {
         }
     },
     mounted() {
+        axios
+            .get('/api/posts/' + this.slug)
+            .then((response) => {
+                this.fields = response.data.data;
+                this.url = "/" + response.data.data.image_path;
+            })
+            .catch((error) => {
+                if (error.response.status === 403) {
+                    this.$router.push({name: 'PostsList'});
+                }
+            });
+
         this.fields = {};
         this.fields.category_id = "";
         this.errors = {};

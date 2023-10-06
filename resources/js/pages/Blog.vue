@@ -7,14 +7,8 @@
         <button class="search-button">Search</button>
     </div>
     <div class="tags">
-        <div class="tag">
-            <span>#Health</span>
-        </div>
-        <div class="tag">
-            <span>#Sport</span>
-        </div>
-        <div class="tag">
-            <span>#Music</span>
+        <div class="tag" v-for="category in categories" :key="category.id">
+            <a href="#" @click="filterByCategory(category.name)"><span>#{{ category.name }}</span></a>
         </div>
     </div>
     <div class="posts">
@@ -53,15 +47,39 @@ export default {
     data() {
         return {
             posts: [],
+            categories: [],
         }
     },
+    methods: {
+        filterByCategory(name) {
+            axios
+                .get('/api/posts', {
+                    params: {
+                        category: name,
+                    },
+                })
+                .then((response) => {
+                    this.posts = response.data.data;
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        },
+    },
     mounted() {
-        const token = localStorage.getItem('authToken');
-
         axios
             .get('/api/posts')
             .then((response) => {
                 this.posts = response.data.data;
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+        axios
+            .get('/api/categories')
+            .then((response) => {
+                this.categories = response.data;
             })
             .catch((error) => {
                 console.log(error);
@@ -114,7 +132,7 @@ export default {
 
 .tag {
     background-color: #a22e2e;
-    padding: 12px 30px;
+    padding: 12px 20px;
     border-radius: 15px;
 }
 

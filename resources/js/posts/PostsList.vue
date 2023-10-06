@@ -18,10 +18,10 @@
                 <td>{{ post.title }}</td>
                 <td>
 
-                    <router-link :to="{name: 'EditCategories', params: {id: post.id}}" class="white-link">
+                    <router-link :to="{name: 'EditPosts', params: {slug: post.link}}" class="white-link">
                         <button class="edit-button">Edit</button>
                     </router-link>
-                    <button class="delete-button" @click="destroy(post.id)">Delete</button>
+                    <button class="delete-button" @click="destroy(post.link)">Delete</button>
                 </td>
             </tr>
             </tbody>
@@ -46,17 +46,47 @@ export default {
             success: false
         }
     },
-    mounted() {
-        const token = localStorage.getItem('authToken');
+    methods: {
+        destroy(slug) {
+            const token = localStorage.getItem('authToken');
 
-        axios
-            .get('/api/posts')
-            .then((response) => {
-                this.posts = response.data.data;
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+            axios
+                .delete(`/api/posts/${slug}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+                .then(() => {
+                    this.updateList();
+                    this.success = true;
+
+                    setInterval(() => {
+                        this.success = false;
+                    }, 2000);
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        },
+        updateList() {
+            const token = localStorage.getItem('authToken');
+
+            axios
+                .get('/api/manage-posts', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+                .then((response) => {
+                    this.posts = response.data.data;
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    },
+    mounted() {
+        this.updateList();
     }
 }
 </script>
