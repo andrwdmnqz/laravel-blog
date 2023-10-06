@@ -11,6 +11,20 @@ use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
+    public function index(Request $request)
+    {
+        if ($request->category) {
+            return PostResource::collection(Category::where('name', $request->category)->firstOrFail()->posts()->latest()->paginate(2)->withQueryString());
+        }
+
+        else if ($request->search) {
+            return PostResource::collection(Post::where('title', 'like', '%' . $request->search . '%')
+                ->orWhere('text', 'like', '%' . $request->search . '%')->latest()->paginate(2)->withQueryString());
+        }
+
+        return PostResource::collection(Post::latest()->paginate(2));
+    }
+
     public function store(Request $request)
     {
         $inputFields = $request->validate([
@@ -46,15 +60,6 @@ class PostController extends Controller
         }
 
         return new PostResource($post);
-    }
-
-    public function index(Request $request)
-    {
-        if ($request->category) {
-            return PostResource::collection(Category::where('name', $request->category)->firstOrFail()->posts()->latest()->get());
-        }
-
-        return PostResource::collection(Post::latest()->get());
     }
 
     public function update(Request $request, Post $post)

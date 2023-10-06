@@ -3,7 +3,7 @@
         <h1>All blog posts</h1>
     </div>
     <div class="searchbar">
-        <input type="text" placeholder="Enter keyword" class="search-input">
+        <input type="text" placeholder="Enter keyword" class="search-input" v-model="title">
         <button class="search-button">Search</button>
     </div>
     <div class="tags">
@@ -28,14 +28,13 @@
         </div>
     </div>
 
+    <div class="main-title no-matches" v-if="!posts.length">
+        <h1>No matches found</h1>
+    </div>
+
     <div class="pagination">
-        <ul>
-            <li><a href="#">&laquo;</a></li>
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">&raquo;</a></li>
-        </ul>
+        <a href="#" v-for="(link, index) in links" :key="index" v-html="link.label"
+           :class="{active: link.active, disabled: !link.url }" @click="changePage(link)"></a>
     </div>
 </template>
 
@@ -48,6 +47,8 @@ export default {
         return {
             posts: [],
             categories: [],
+            title: '',
+            links: [],
         }
     },
     methods: {
@@ -60,17 +61,35 @@ export default {
                 })
                 .then((response) => {
                     this.posts = response.data.data;
+                    this.links = response.data.meta.links;
                 })
                 .catch((error) => {
                     console.log(error);
                 });
         },
+        changePage(link) {
+            if (!link.url || link.active) {
+                return;
+            }
+
+            axios
+                .get(link.url)
+                .then((response) => {
+                    this.posts = response.data.data;
+                    this.links = response.data.meta.links;
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
     },
     mounted() {
         axios
             .get('/api/posts')
             .then((response) => {
+                console.log(response);
                 this.posts = response.data.data;
+                this.links = response.data.meta.links;
             })
             .catch((error) => {
                 console.log(error);
@@ -84,6 +103,23 @@ export default {
             .catch((error) => {
                 console.log(error);
             });
+    },
+    watch: {
+        title() {
+            axios
+                .get('/api/posts', {
+                    params: {
+                        search: this.title,
+                    },
+                })
+                .then((response) => {
+                    this.posts = response.data.data;
+                    this.links = response.data.meta.links;
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
     }
 }
 </script>
@@ -136,6 +172,10 @@ export default {
     border-radius: 15px;
 }
 
+.no-matches {
+    margin-bottom: 50px;
+}
+
 .pagination {
     text-align: center;
     margin-top: 20px;
@@ -159,10 +199,23 @@ export default {
     color: white;
     padding: 5px 10px;
     border-radius: 5px;
+    margin: 2px 5px;
 }
 
 .pagination a:hover {
-    background-color: #1a1e24;
+    background-color: white !important;
+    color: black;
+    transition-duration: 0.5s;
+}
+
+.active {
+    background-color: #1a1e24 !important;
+}
+
+.active:hover {
+    background-color: white !important;
+    color: black;
+    transition-duration: 0.5s;
 }
 
 @media screen and (max-width: 576px) {
@@ -174,5 +227,9 @@ export default {
         padding: 8px 24px;
         font-size: 16px;
     }
+}
+
+.disabled {
+    pointer-events: none;
 }
 </style>
