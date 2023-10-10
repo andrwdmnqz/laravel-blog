@@ -35,60 +35,57 @@
 
 </template>
 
-<script>
+<script setup>
+import { ref, defineEmits, onMounted } from "vue";
 import axios from "axios";
 
-export default {
-    emits: ['updateSidebar'],
-    data() {
-        return {
-            posts: [],
-            success: false
-        }
-    },
-    methods: {
-        destroy(slug) {
-            const token = localStorage.getItem('authToken');
+const emits = defineEmits(['updateSidebar']);
 
-            axios
-                .delete(`/api/posts/${slug}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                })
-                .then(() => {
-                    this.updateList();
-                    this.success = true;
+const posts = ref([]);
+const success = ref(false);
 
-                    setInterval(() => {
-                        this.success = false;
-                    }, 2000);
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
-        },
-        updateList() {
-            const token = localStorage.getItem('authToken');
+const destroy = (slug) => {
+    const token = localStorage.getItem('authToken');
 
-            axios
-                .get('/api/manage-posts', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                })
-                .then((response) => {
-                    this.posts = response.data.data;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        }
-    },
-    mounted() {
-        this.updateList();
-    }
-}
+    axios
+        .delete(`/api/posts/${slug}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        .then(() => {
+            updateList();
+            success.value = true;
+
+            setInterval(() => {
+                success.value = false;
+            }, 2000);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+};
+
+const updateList = () => {
+    const token = localStorage.getItem('authToken');
+
+    axios
+        .get('/api/manage-posts', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        .then((response) => {
+            posts.value = response.data.data;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+};
+
+onMounted(() => {
+    updateList();
+});
 </script>
 
 <style>

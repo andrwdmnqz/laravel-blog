@@ -16,59 +16,56 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import { ref, defineEmits, onMounted } from "vue";
 import axios from "axios";
+import router from "@/router/index.js";
 
-export default {
-    emits: ['updateSidebar'],
-    data() {
-        return {
-            userName: '',
-        }
-    },
-    mounted() {
-        const authToken = localStorage.getItem("authToken");
+const userName = ref('');
 
-        axios
-            .get('/api/user', {
-                headers: {
-                    Authorization: `Bearer ${authToken}`,
-                },
-            })
-            .then((response) => {
-                this.userName = response.data.name;
-            })
-            .catch((error) => {
-                if (error.response.status === 401) {
-                    this.$emit('updateSidebar');
-                    localStorage.removeItem('authToken');
-                    localStorage.removeItem('authenticated');
-                    this.$router.push({name: 'Login'});
-                }
-            });
-    },
-    methods: {
-        logout() {
-            const authToken = localStorage.getItem("authToken");
+const emits = defineEmits(['updateSidebar']);
 
-            axios
-                .get('/api/logout', {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`,
-                    },
-                })
-                .then((response) => {
-                    localStorage.removeItem('authToken');
-                    localStorage.removeItem('authenticated');
-                    this.$emit('updateSidebar');
-                    this.$router.push({name: 'Home'});
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        }
-    }
-}
+onMounted(() => {
+    const authToken = localStorage.getItem("authToken");
+
+    axios
+        .get('/api/user', {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },
+        })
+        .then((response) => {
+            userName.value = response.data.name;
+        })
+        .catch((error) => {
+            if (error.response.status === 401) {
+                emits('updateSidebar');
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('authenticated');
+                router.push({name: 'Login'});
+            }
+        });
+});
+
+const logout = () => {
+    const authToken = localStorage.getItem("authToken");
+
+    axios
+        .get('/api/logout', {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },
+        })
+        .then((response) => {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('authenticated');
+            emits('updateSidebar');
+            router.push({name: 'Home'});
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+};
 </script>
 
 <style>

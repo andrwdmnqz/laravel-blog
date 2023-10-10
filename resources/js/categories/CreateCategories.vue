@@ -24,42 +24,37 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from "vue";
 import axios from "axios";
 
-export default {
-    emits: ['updateSidebar'],
-    data() {
-        return {
-            field: {},
-            errors: {},
-            success: false
-        };
-    },
-    methods: {
-        submit() {
-            const token = localStorage.getItem('authToken');
+const emits = defineEmits(['updateSidebar']);
 
-            axios
-                .post('/api/categories/create', this.field, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    }
-                })
-                .then(() => {
-                    this.field = {};
-                    this.errors = {};
-                    this.success = true;
+const field = ref({});
+const errors = ref({});
+const success = ref(false);
 
-                    setInterval(() => {
-                        this.success = false;
-                    }, 2000);
-                }).catch((error) => {
-                    this.errors = error.response.data.errors;
-            });
-        }
-    }
-}
+const submit = () => {
+    const token = localStorage.getItem('authToken');
+
+    axios
+        .post('/api/categories/create', field.value, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        })
+        .then(() => {
+            field.value = {};
+            errors.value = {};
+            success.value = true;
+
+            setInterval(() => {
+                success.value = false;
+            }, 2000);
+        }).catch((error) => {
+        errors.value = error.response.data.errors;
+    });
+};
 </script>
 
 <style>

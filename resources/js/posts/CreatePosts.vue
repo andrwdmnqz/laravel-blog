@@ -46,7 +46,7 @@
     </div>
     <div class="link">
         <h2>
-            <router-link :to="{name: 'CategoriesList'}" class="white-link">Posts list</router-link>
+            <router-link :to="{name: 'PostsList'}" class="white-link">Posts list</router-link>
         </h2>
     </div>
 </template>

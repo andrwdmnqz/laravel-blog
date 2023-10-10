@@ -15,9 +15,7 @@ class PostController extends Controller
     {
         if ($request->category) {
             return PostResource::collection(Category::where('name', $request->category)->firstOrFail()->posts()->latest()->paginate(2)->withQueryString());
-        }
-
-        else if ($request->search) {
+        } else if ($request->search) {
             return PostResource::collection(Post::where('title', 'like', '%' . $request->search . '%')
                 ->orWhere('text', 'like', '%' . $request->search . '%')->latest()->paginate(2)->withQueryString());
         }
@@ -56,9 +54,14 @@ class PostController extends Controller
     public function show(Post $post)
     {
         if (auth()->user()->id !== $post->user_id) {
-            return abort(403);
+            abort(403, 'You do not have permission to update this post.');
         }
 
+        return new PostResource($post);
+    }
+
+    public function getPost(Post $post)
+    {
         return new PostResource($post);
     }
 

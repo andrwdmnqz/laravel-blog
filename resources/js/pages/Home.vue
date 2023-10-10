@@ -20,27 +20,24 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted, defineEmits } from "vue";
 import axios from "axios";
 
-export default {
-    emits: ['updateSidebar'],
-    data() {
-        return {
-            posts: [],
-        }
-    },
-    mounted() {
-        const token = localStorage.getItem('authToken');
+const emits = defineEmits(['updateSidebar']);
 
-        axios
-            .get('/api/home-posts')
-            .then((response) => {
-                this.posts = response.data.data;
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
-}
+const posts = ref([]);
+
+onMounted(() => {
+    const token = localStorage.getItem('authToken');
+
+    axios
+        .get('/api/home-posts')
+        .then((response) => {
+            posts.value = response.data.data;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+});
 </script>

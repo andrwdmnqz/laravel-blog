@@ -24,58 +24,55 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted, defineEmits, defineProps } from "vue";
 import axios from "axios";
 
-export default {
-    props: ['id'],
-    emits: ['updateSidebar'],
-    data() {
-        return {
-            field: {},
-            errors: {},
-            success: false
-        };
-    },
-    methods: {
-        submit() {
-            const token = localStorage.getItem('authToken');
+const emits = defineEmits(['updateSidebar']);
 
-            axios
-                .put('/api/categories/' + this.id, this.field, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    }
-                })
-                .then(() => {
-                    this.errors = {};
-                    this.success = true;
+const { id } = defineProps(['id']);
 
-                    setInterval(() => {
-                        this.success = false;
-                    }, 2000);
-                }).catch((error) => {
-                this.errors = error.response.data.errors;
-            });
-        }
-    },
-    mounted() {
-        const authToken = localStorage.getItem("authToken");
+const field = ref({});
+const errors = ref({});
+const success = ref(false);
 
-        axios
-            .get('/api/categories/' + this.id, {
-                headers: {
-                    Authorization: `Bearer ${authToken}`,
-                },
-            })
-            .then((response) => {
-                this.field = response.data;
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    },
+const submit = () => {
+    const token = localStorage.getItem('authToken');
+
+    axios
+        .put('/api/categories/' + id, field.value, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        })
+        .then(() => {
+            errors.value = {};
+            success.value = true;
+
+            setInterval(() => {
+                success.value = false;
+            }, 2000);
+        }).catch((error) => {
+        errors.value = error.response.data.errors;
+    });
 }
+
+onMounted(() => {
+    const authToken = localStorage.getItem("authToken");
+
+    axios
+        .get('/api/categories/' + id, {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },
+        })
+        .then((response) => {
+            field.value = response.data;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+});
 </script>
 
 <style>

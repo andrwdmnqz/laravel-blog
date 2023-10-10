@@ -26,35 +26,33 @@
     </div>
 </template>
 
-<script>
-export default {
-    emits: ['updateSidebar'],
-    data() {
-        return {
-            wrongCredentialsText: '',
-            fields: {
-            },
-            errors: {
-            }
+<script setup>
+import { ref, defineEmits } from "vue";
+import axios from "axios";
+import router from "@/router/index.js";
+
+const emits = defineEmits(['updateSidebar']);
+
+const wrongCredentialsText = ref('');
+const fields = ref({});
+const errors = ref({});
+
+const submit = () => {
+    errors.value = {};
+    axios
+        .post('/api/login', fields.value)
+        .then((response) => {
+            localStorage.setItem('authToken', response.data.token);
+            localStorage.setItem('authenticated', 'true');
+            router.push({ name: 'Manage' });
+            emits('updateSidebar');
+    }).catch((error) => {
+        errors.value = error.response.data.errors;
+        if (error.response.status === 401) {
+            errors.value = error.response.data;
         }
-    },
-    methods: {
-        submit() {
-            this.errors = {};
-            axios.post('/api/login', this.fields).then((response) => {
-                localStorage.setItem('authToken', response.data.token);
-                localStorage.setItem('authenticated', 'true');
-                this.$router.push({name: 'Manage'});
-                this.$emit('updateSidebar');
-            }).catch((error) => {
-                this.errors = error.response.data.errors;
-                if (error.response.status === 401) {
-                    this.errors = error.response.data;
-                }
-            });
-        }
-    }
-}
+    });
+};
 </script>
 
 <style>

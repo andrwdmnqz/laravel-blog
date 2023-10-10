@@ -36,28 +36,26 @@
     </div>
 </template>
 
-<script>
-export default {
-    emits: ['updateSidebar'],
-    data() {
-        return {
-            fields: {},
-            errors: {}
-        }
-    },
-    methods: {
-        submit() {
-            axios.post('/api/register', this.fields).then((response) => {
-                localStorage.setItem('authToken', response.data.token);
-                localStorage.setItem('authenticated', 'true');
-                this.$router.push({name: 'Manage'});
-                this.$emit('updateSidebar');
-            }).catch((error) => {
-                console.log(error);
-                this.errors = error.response.data.errors;
-            });
-        }
-    }
+<script setup>
+import { ref, defineEmits } from "vue";
+import axios from "axios";
+import router from "@/router/index.js";
+
+const fields = ref({});
+const errors = ref({});
+
+const emits = defineEmits(['updateSidebar']);
+
+const submit = () => {
+    axios.post('/api/register', fields.value).then((response) => {
+        localStorage.setItem('authToken', response.data.token);
+        localStorage.setItem('authenticated', 'true');
+        router.push({name: 'Manage'});
+        emits('updateSidebar');
+    }).catch((error) => {
+        console.log(error);
+        errors.value = error.response.data.errors;
+    });
 };
 </script>
 

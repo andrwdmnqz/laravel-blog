@@ -38,90 +38,86 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted, watch, defineEmits } from "vue";
 import axios from "axios";
 
-export default {
-    emits: ['updateSidebar'],
-    data() {
-        return {
-            posts: [],
-            categories: [],
-            title: '',
-            links: [],
-        }
-    },
-    methods: {
-        filterByCategory(name) {
-            axios
-                .get('/api/posts', {
-                    params: {
-                        category: name,
-                    },
-                })
-                .then((response) => {
-                    this.posts = response.data.data;
-                    this.links = response.data.meta.links;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        },
-        changePage(link) {
-            if (!link.url || link.active) {
-                return;
-            }
+const posts = ref([]);
+const categories = ref([]);
+const links = ref([]);
+const title = ref('');
 
-            axios
-                .get(link.url)
-                .then((response) => {
-                    this.posts = response.data.data;
-                    this.links = response.data.meta.links;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        }
-    },
-    mounted() {
-        axios
-            .get('/api/posts')
-            .then((response) => {
-                console.log(response);
-                this.posts = response.data.data;
-                this.links = response.data.meta.links;
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+const emits = defineEmits(['updateSidebar']);
 
-        axios
-            .get('/api/categories')
-            .then((response) => {
-                this.categories = response.data;
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    },
-    watch: {
-        title() {
-            axios
-                .get('/api/posts', {
-                    params: {
-                        search: this.title,
-                    },
-                })
-                .then((response) => {
-                    this.posts = response.data.data;
-                    this.links = response.data.meta.links;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        }
+const filterByCategory = (name) => {
+    axios
+        .get('/api/posts', {
+            params: {
+                category: name,
+            },
+        })
+        .then((response) => {
+            posts.value = response.data.data;
+            links.value = response.data.meta.links;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+};
+
+const changePage = (link) => {
+    if (!link.url || link.active) {
+        return;
     }
-}
+
+    axios
+        .get(link.url)
+        .then((response) => {
+            posts.value = response.data.data;
+            links.value = response.data.meta.links;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+};
+
+onMounted(() => {
+    axios
+        .get('/api/posts')
+        .then((response) => {
+            console.log(response);
+            posts.value = response.data.data;
+            links.value = response.data.meta.links;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+
+    axios
+        .get('/api/categories')
+        .then((response) => {
+            categories.value = response.data;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+});
+
+watch(title, (newTitle) => {
+    axios
+        .get('/api/posts', {
+            params: {
+                search: newTitle,
+            },
+        })
+        .then((response) => {
+            posts.value = response.data.data;
+            links.value = response.data.meta.links;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+});
 </script>
 
 <style>

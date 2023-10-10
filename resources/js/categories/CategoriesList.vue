@@ -7,83 +7,79 @@
     </div>
     <div class="center-div">
         <table>
-            <tr>
-                <th>Number</th>
-                <th>Name</th>
-                <th>Actions</th>
-            </tr>
+            <thead>
+                <tr>
+                    <th>Number</th>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
             <tbody>
-            <tr v-for="(category, index) in categories" :key="category.id">
-                <td>{{ index + 1 }}</td>
-                <td>{{ category.name }}</td>
-                <td>
-
-                    <router-link :to="{name: 'EditCategories', params: {id: category.id}}" class="white-link">
-                        <button class="edit-button">Edit</button>
-                    </router-link>
-                    <button class="delete-button" @click="destroy(category.id)">Delete</button>
-                </td>
-            </tr>
+                <tr v-for="(category, index) in categories" :key="category.id">
+                    <td>{{ index + 1 }}</td>
+                    <td>{{ category.name }}</td>
+                    <td>
+                        <router-link :to="{ name: 'EditCategories', params: { id: category.id } }" class="white-link">
+                            <button class="edit-button">Edit</button>
+                        </router-link>
+                        <button class="delete-button" @click="destroy(category.id)">Delete</button>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
     <div class="link">
         <h2>
-            <router-link :to="{name: 'CreateCategories'}" class="white-link">Create categories</router-link>
+            <router-link :to="{ name: 'CreateCategories' }" class="white-link">Create categories</router-link>
         </h2>
     </div>
-
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from "vue";
 import axios from "axios";
 
-export default {
-    emits: ['updateSidebar'],
-    data() {
-        return {
-            categories: [],
-            success: false
-        }
-    },
-    mounted() {
-        this.updateList();
-    },
-    methods: {
-        destroy(id) {
-            const authToken = localStorage.getItem("authToken");
+const emits = defineEmits(['updateSidebar']);
 
-            axios
-                .delete('/api/categories/' + id, {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`,
-                    },
-                })
-                .then((response) => {
-                    this.success = true;
+const categories = ref([]);
+const success = ref(false);
 
-                    setInterval(() => {
-                        this.success = false;
-                    }, 2000);
-                    this.updateList();
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        },
-        updateList() {
+const destroy = (id) => {
+    const authToken = localStorage.getItem("authToken");
 
-            axios
-                .get('/api/categories')
-                .then((response) => {
-                    this.categories = response.data;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        }
-    }
-}
+    axios
+        .delete(`/api/categories/${id}`, {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },
+        })
+        .then((response) => {
+            success.value = true;
+
+            setInterval(() => {
+                success.value = false;
+            }, 2000);
+            updateList();
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+};
+
+const updateList = () => {
+    axios
+        .get('/api/categories')
+        .then((response) => {
+            categories.value = response.data;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+};
+
+onMounted(() => {
+    updateList();
+});
 </script>
 
 <style>

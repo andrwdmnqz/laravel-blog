@@ -28,38 +28,36 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted, defineEmits, defineProps } from "vue";
 import axios from "axios";
 
-export default {
-    emits: ['updateSidebar'],
-    props: ['slug'],
-    data() {
-        return {
-            post: {},
-            relatedPosts: [],
-        }
-    },
-    mounted() {
-        axios
-            .get('/api/posts/' + this.slug)
-            .then((response) => {
-                this.post = response.data.data;
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+const emits = defineEmits(['updateSidebar']);
 
-        axios
-            .get('/api/related-posts/' + this.slug)
-            .then((response) => {
-                this.relatedPosts = response.data.data;
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
-}
+const { slug } = defineProps(['slug']);
+
+const post = ref({});
+const relatedPosts = ref([]);
+
+onMounted(() => {
+    axios
+        .get(`/api/posts/${slug}`)
+        .then((response) => {
+            post.value = response.data.data;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+
+    axios
+        .get('/api/related-posts/' + slug)
+        .then((response) => {
+            relatedPosts.value = response.data.data;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+});
 </script>
 
 <style>

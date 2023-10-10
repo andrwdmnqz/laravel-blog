@@ -53,107 +53,110 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted, defineProps, defineEmits } from "vue";
 import axios from "axios";
+import router from "@/router/index.js";
 
-export default {
-    props: ['slug'],
-    emits: ['updateSidebar'],
-    data() {
-        return {
-            fields: {
-                category_id: "",
-            },
-            errors: {},
-            success: false,
-            url: "",
-            categories: [],
-        };
-    },
-    methods: {
-        submit() {
-            const token = localStorage.getItem('authToken');
+const emits = defineEmits(['updateSidebar']);
+const { slug } = defineProps(['slug']);
 
-            const fd = new FormData();
-            fd.append('title', this.fields.title);
-            fd.append('category_id', this.fields.category_id);
-            fd.append('text', this.fields.text);
+const fields = ref({
+    category_id: "",
+    title: "",
+    text: "",
+    file: null
+});
+const errors = ref({});
+const success = ref(false);
+const url = ref("");
+const categories = ref([]);
 
-            if (this.fields.file) {
-                fd.append('file', this.fields.file);
-            }
+const submit = () => {
+    const token = localStorage.getItem('authToken');
 
-            fd.append('_method', 'PUT');
+    const fd = new FormData();
+    fd.append('title', fields.value.title);
+    fd.append('category_id', fields.value.category_id);
+    fd.append('text', fields.value.text);
 
-            axios
-                .post(`/api/posts/${this.slug}`, fd, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "content-type": "multipart/form-data",
-                    }
-                })
-                .then(() => {
-                    this.fields = {};
-                    this.fields.category_id = "";
-                    this.errors = {};
-                    this.url = null;
-                    this.$refs.fileInput.value = null;
-
-                    this.success = true;
-
-                    setInterval(() => {
-                        this.success = false;
-                    }, 2000);
-                }).catch((error) => {
-                this.errors = error.response.data.errors;
-                this.success = false;
-                if (error.response.status === 403) {
-                    this.$router.push({name: 'PostsList'});
-                }
-            });
-        },
-
-        getFile(f) {
-            const uploadedFile = f.target.files[0];
-            this.fields.file = uploadedFile;
-            this.url = URL.createObjectURL(uploadedFile);
-            URL.revokeObjectURL(uploadedFile);
-        }
-    },
-    mounted() {
-        axios
-            .get('/api/posts/' + this.slug)
-            .then((response) => {
-                this.fields = response.data.data;
-                this.url = "/" + response.data.data.image_path;
-            })
-            .catch((error) => {
-                if (error.response.status === 403) {
-                    this.$router.push({name: 'PostsList'});
-                }
-            });
-
-        this.fields = {};
-        this.fields.category_id = "";
-        this.errors = {};
-        this.success = false;
-
-        const authToken = localStorage.getItem("authToken");
-
-        axios
-            .get('/api/categories', {
-                headers: {
-                    Authorization: `Bearer ${authToken}`,
-                },
-            })
-            .then((response) => {
-                this.categories = response.data;
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+    if (fields.value.file) {
+        fd.append('file', fields.value.file);
     }
-}
+
+    fd.append('_method', 'PUT');
+
+    axios
+        .post(`/api/posts/${slug}`, fd, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "content-type": "multipart/form-data",
+            }
+        })
+        .then(() => {
+
+            getPostData();
+
+            success.value = true;
+
+            setInterval(() => {
+                success.value = false;
+            }, 2000);
+        }).catch((error) => {
+            console.log(error);
+            errors.value = error.response.data.errors;
+            success.value = false;
+            if (error.response.status === 403) {
+                router.push({name: 'PostsList'});
+            }
+    });
+};
+
+const getPostData = () => {
+    const token = localStorage.getItem('authToken');
+
+    axios
+        .get(`/api/posts/show-post/${slug}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        })
+        .then((response) => {
+            fields.value = response.data.data;
+            url.value = "/" + response.data.data.image_path;
+        })
+        .catch((error) => {
+            if (error.response.status === 403) {
+                router.push({name: 'PostsList'});
+            }
+        });
+
+    const authToken = localStorage.getItem("authToken");
+
+    axios
+        .get('/api/categories', {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },
+        })
+        .then((response) => {
+            categories.value = response.data;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+};
+
+const getFile = (f) => {
+    const uploadedFile = f.target.files[0];
+    fields.value.file = uploadedFile;
+    url.value = URL.createObjectURL(uploadedFile);
+    URL.revokeObjectURL(uploadedFile);
+};
+
+onMounted(() => {
+    getPostData();
+});
 </script>
 
 <style>

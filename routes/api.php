@@ -46,6 +46,7 @@ Route::get('categories', [CategoryController::class, 'index']);
 Route::middleware('auth:sanctum')->group(function() {
     Route::post('posts', [PostController::class, 'store']);
     Route::get('manage-posts', [ManagePostController::class, 'index']);
+    Route::get('posts/show-post/{post:link}', [PostController::class, 'show']);
     Route::put('posts/{post:link}', [PostController::class, 'update']);
     Route::delete('posts/{post:link}', [PostController::class, 'destroy']);
 });
@@ -56,6 +57,6 @@ Route::post('register', [UserController::class, 'store']);
 Route::post('login', [UserController::class, 'login']);
 
 Route::get('home-posts', [HomeController::class, 'index']);
-Route::get('posts/{post:link}', [PostController::class, 'show']);
+Route::get('posts/{post:link}', [PostController::class, 'getPost']);
 Route::get('posts', [PostController::class, 'index']);
 Route::get('related-posts/{post:link}', [RelatedPostController::class, 'index']);

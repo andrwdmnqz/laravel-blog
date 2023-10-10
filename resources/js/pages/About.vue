@@ -11,10 +11,10 @@
     </div>
 </template>
 
-<script>
-export default {
-    emits: ['updateSidebar'],
-}
+<script setup>
+import { defineEmits } from 'vue';
+
+const emits = defineEmits(['updateSidebar']);
 </script>
 
 <style>
