@@ -70,7 +70,7 @@ const submit = () => {
     width: fit-content;
     padding: 20px;
     background-color: #a22e2e;
-    margin-top: 40px;
+    margin: 40px 0;
 }
 
 .login-form div {

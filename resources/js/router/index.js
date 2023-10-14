@@ -13,6 +13,7 @@ import EditCategories from "../categories/EditCategories.vue";
 import CreatePosts from "../posts/CreatePosts.vue";
 import PostsList from "../posts/PostsList.vue";
 import EditPosts from "../posts/EditPosts.vue";
+import OfficesList from "../offices/OfficesList.vue";
 
 const routes = [
     {
@@ -92,6 +93,12 @@ const routes = [
         component: EditPosts,
         meta: {requiresAuth: true},
         props: true
+    },
+    {
+        path: "/offices",
+        name: "OfficesList",
+        component: OfficesList,
+        meta: {requiresAuth: true}
     },
 ];
 

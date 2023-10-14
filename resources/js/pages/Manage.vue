@@ -12,6 +12,7 @@
             <li><router-link :to="{name: 'PostsList'}" class="white-link">Posts list</router-link></li>
             <li><router-link :to="{name: 'CreateCategories'}" class="white-link">Create categories</router-link></li>
             <li><router-link :to="{name: 'CategoriesList'}" class="white-link">Categories list</router-link></li>
+            <li><router-link :to="{name: 'OfficesList'}" class="white-link">OfficesList</router-link></li>
         </ul>
     </div>
 </template>

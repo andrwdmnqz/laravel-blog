@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ManagePostController;
+use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RelatedPostController;
 use App\Http\Controllers\UserController;
@@ -51,12 +52,17 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::delete('posts/{post:link}', [PostController::class, 'destroy']);
 });
 
-// Public routes
+// Public user routes
 
 Route::post('register', [UserController::class, 'store']);
 Route::post('login', [UserController::class, 'login']);
+
+// Public posts routes
 
 Route::get('home-posts', [HomeController::class, 'index']);
 Route::get('posts/{post:link}', [PostController::class, 'getPost']);
 Route::get('posts', [PostController::class, 'index']);
 Route::get('related-posts/{post:link}', [RelatedPostController::class, 'index']);
+
+// Public office routes
+Route::get('/offices', [OfficeController::class, 'index']);
